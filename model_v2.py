@@ -49,6 +49,7 @@ def unet(pretrained_weights=None, input_size=(512, 512, 3),num_class=2):
 		return total_iou / num_labels
 	
 	def iou_loss_score(true, pred):  # this can be used as a loss if you make it negative
+		# https://www.kaggle.com/c/tgs-salt-identification-challenge/discussion/63044
 		intersection = true * pred
 		notTrue = 1 - true
 		union = true + (notTrue * pred)

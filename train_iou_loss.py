@@ -12,12 +12,12 @@ config.gpu_options.allow_growth=True
 sess = tf.Session(config=config)
 K.set_session(sess)
 
-train_path = "640x400_small"
+train_path = "640x400_all"
 image_folder = "train"
-label_folder = "trainannot"
-valid_path =  "640x400_small"
+label_folder = "train_labels"
+valid_path =  "640x400_all"
 valid_image_folder ="val"
-valid_label_folder = "valannot"
+valid_label_folder = "val_labels"
 test_path = '640x400_small/test/'
 log_filepath = './log'
 flag_multi_class = True

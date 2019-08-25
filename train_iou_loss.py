@@ -44,7 +44,7 @@ model_checkpoint = keras.callbacks.ModelCheckpoint(
 
 history = model.fit_generator(
     train_data,
-    steps_per_epoch=150, epochs=100,
+    steps_per_epoch=300, epochs=100,
     validation_steps=1,
     validation_data=valid_data,
     callbacks=[model_checkpoint, tb_cb]

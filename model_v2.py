@@ -117,9 +117,12 @@ def unet(pretrained_weights=None, input_size=(512, 512, 3), num_class=2):
 	
 	model = Model(input=inputs, output=conv10)
 	# model.compile(optimizer=Adam(lr=1e-4), loss=loss_function, metrics=["accuracy"])
-	# model.compile(optimizer=Adam(lr=1e-4), loss=iou_loss_score, metrics=["accuracy"])
-	# model.compile(optimizer=SGD(lr=1e-4), loss=loss_function, metrics=["accuracy"])
-	model.compile(optimizer=RMSprop(lr=1e-4, decay=0.995), loss=loss_function, metrics=["accuracy"])
+	# model.compile(optimizer=Adam(lr=1e-4), loss=iou_loss_score, metrics=["accuracy"]) # no funciona
+	# model.compile(optimizer=SGD(lr=1e-4, nesterov=True), loss=loss_function, metrics=["accuracy"])
+	model.compile(optimizer=Adadelta(lr=1.0, decay=0.05), loss=loss_function, metrics=["accuracy"])
+	# model.compile(optimizer=RMSprop(lr=1e-4, decay=0.995), loss=loss_function, metrics=["accuracy"])
+
+	# https://www.dlology.com/blog/quick-notes-on-how-to-choose-optimizer-in-keras/
 	
 	model.summary()
 

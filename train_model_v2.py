@@ -40,7 +40,7 @@ model = unet(num_class=4, input_size=(640, 400, 3))
 
 tb_cb = TensorBoard(log_dir=log_filepath)
 model_checkpoint = keras.callbacks.ModelCheckpoint(
-    './model/model_v2_rmsprop_categorical_crossentropy.hdf5', monitor='val_loss', verbose=1, save_best_only=True
+    './model/model_v2_adadelta_categorical_crossentropy.hdf5', monitor='val_loss', verbose=1, save_best_only=True
 )
 
 history = model.fit_generator(

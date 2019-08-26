@@ -4,6 +4,7 @@ import numpy as np
 import os
 import skimage.io as io
 import skimage.transform as trans
+from utils import helpers
 import cv2
 import warnings
 
@@ -25,22 +26,15 @@ warnings.filterwarnings("ignore")
 # twelve = [0, 128, 192]
 # COLOR_DICT = np.array([one, two,three,four,five,six,seven,eight,nine,ten,eleven,twelve])
 
-sclera = [0, 239, 255]
-iris = [223, 103, 0]
-pupil = [0, 255, 24]
-bg = [0, 0, 0]
-
-COLOR_DICT = np.array([sclera, iris, pupil, bg])
-
-
-
 class data_preprocess:
-	def __init__(self, train_path=None, image_folder=None, label_folder=None,
-				 valid_path=None,valid_image_folder =None,valid_label_folder = None,
-				 test_path=None, save_path=None,
-				 img_rows=512, img_cols=512,
-				 flag_multi_class=False,
-				 num_classes = 2):
+	def __init__(
+		self, train_path=None, image_folder=None, label_folder=None,
+		valid_path=None,valid_image_folder =None,valid_label_folder = None,
+		test_path=None, save_path=None, csv_name='class_dict.csv',
+		img_rows=512, img_cols=512,
+		flag_multi_class=False,
+		num_classes = 2):
+		
 		self.img_rows = img_rows
 		self.img_cols = img_cols
 		self.train_path = train_path
@@ -51,14 +45,14 @@ class data_preprocess:
 		self.valid_label_folder = valid_label_folder
 		self.test_path = test_path
 		self.save_path = save_path
-		self.data_gen_args = dict(rotation_range=0.2,
-								  width_shift_range=0.05,
-								  height_shift_range=0.05,
-								  shear_range=0.05,
-								  zoom_range=0.05,
-								  vertical_flip=True,
-								  horizontal_flip=True,
-								  fill_mode='nearest')
+		self.class_names_list, self.label_values = helpers.get_label_info(os.path.join(self.train_path, csv_name))
+		self.COLOR_DICT = np.array(self.label_values)
+		self.data_gen_args = dict(
+			rotation_range=0.2, width_shift_range=0.05,
+			height_shift_range=0.05, shear_range=0.05,
+			zoom_range=0.05, vertical_flip=True,
+			horizontal_flip=True, fill_mode='nearest'
+		)
 		self.image_color_mode = "rgb"
 		self.label_color_mode = "rgb"
 
@@ -69,8 +63,11 @@ class data_preprocess:
 
 	def adjustData(self, img, label):
 		if (self.flag_multi_class):
-			img = img / 255.
-			label = label / 255.
+			# img = np.float32(img) / 255.
+			# label = label / 255.
+
+			img = np.float32(img) / 255.
+			label = helpers.one_hot_it(label=label, label_values=self.label_values)
 			# label = label[:, :, :, 0] if (len(label.shape) == 4) else label[:, :, :] # posible problema
 			# new_label = np.zeros(label.shape + (self.num_class,))
 			# for i in range(self.num_class):
@@ -160,7 +157,7 @@ class data_preprocess:
 				for row in range(len(img)):
 					for col in range(len(img[row])):
 						num = np.argmax(img[row][col])
-						img_std[row][col] = COLOR_DICT[num]
+						img_std[row][col] = self.COLOR_DICT[num]
 			else:
 				for k in range(len(img)):
 					for j in range(len(img[k])):

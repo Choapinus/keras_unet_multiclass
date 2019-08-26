@@ -4,7 +4,7 @@ from keras.optimizers import *
 from keras import backend as K
 import tensorflow as tf
 
-def unet(pretrained_weights=None, input_size=(512, 512, 3),num_class=2):
+def unet(pretrained_weights=None, input_size=(512, 512, 3), num_class=2):
 	
 
 	def iou(y_true, y_pred, label):
@@ -110,14 +110,14 @@ def unet(pretrained_weights=None, input_size=(512, 512, 3),num_class=2):
 		conv10 = Conv2D(1, 1, activation='sigmoid')(conv9)
 		loss_function = 'binary_crossentropy'
 	else:
-		conv10 = Conv2D(3, 1, activation='softmax')(conv9)
+		conv10 = Conv2D(num_class, 1, activation='softmax')(conv9)
 		loss_function = 'categorical_crossentropy'
 	
 	model = Model(input=inputs, output=conv10)
 	# model.compile(optimizer=Adam(lr=1e-4), loss=loss_function, metrics=["accuracy"])
-	model.compile(optimizer=Adam(lr=1e-4), loss=iou_loss_score, metrics=["accuracy"])
+	# model.compile(optimizer=Adam(lr=1e-4), loss=iou_loss_score, metrics=["accuracy"])
 	# model.compile(optimizer=SGD(lr=1e-4), loss=loss_function, metrics=["accuracy"])
-	# model.compile(optimizer=RMSprop(lr=1e-4, decay=0.995), loss=loss_function, metrics=["accuracy"])
+	model.compile(optimizer=RMSprop(lr=1e-4, decay=0.995), loss=loss_function, metrics=["accuracy"])
 	
 	model.summary()
 

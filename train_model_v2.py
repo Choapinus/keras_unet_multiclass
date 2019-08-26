@@ -31,8 +31,8 @@ dp = data_preprocess(
 )
 
 # train your own model
-train_data = dp.trainGenerator(batch_size=20)
-valid_data = dp.validLoad(batch_size=20)
+train_data = dp.trainGenerator(batch_size=15)
+valid_data = dp.validLoad(batch_size=15)
 test_data = dp.testGenerator()
 
 model = unet(num_class=4, input_size=(640, 400, 3))

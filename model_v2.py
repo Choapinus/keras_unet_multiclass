@@ -112,6 +112,8 @@ def unet(pretrained_weights=None, input_size=(512, 512, 3), num_class=2):
 	else:
 		conv10 = Conv2D(num_class, 1, activation='softmax')(conv9)
 		loss_function = 'categorical_crossentropy'
+		# https://stackoverflow.com/questions/45799474/keras-model-evaluate-vs-model-predict-accuracy-difference-in-multi-class-nlp-ta/45834857#45834857
+		# https://stackoverflow.com/questions/42081257/keras-binary-crossentropy-vs-categorical-crossentropy-performance
 	
 	model = Model(input=inputs, output=conv10)
 	# model.compile(optimizer=Adam(lr=1e-4), loss=loss_function, metrics=["accuracy"])

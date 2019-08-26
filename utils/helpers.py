@@ -123,7 +123,7 @@ def colour_code_segmentation(image, label_values):
     colour_codes = np.array(label_values)
     x = colour_codes[image.astype(int)]
 
-    return x
+    return x.astype(np.uint8)
 
 # class_dict = get_class_dict("CamVid/class_dict.csv")
 # gt = cv2.imread("CamVid/test_labels/0001TP_007170_L.png",-1)

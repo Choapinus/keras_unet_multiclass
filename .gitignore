@@ -1,3 +1,6 @@
 data
 640x400_small
 640x400_all
+out.ft
+err.ft
+__pycache__

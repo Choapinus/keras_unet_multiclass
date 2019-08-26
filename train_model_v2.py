@@ -22,6 +22,7 @@ test_path = '640x400_all/test/'
 log_filepath = './log'
 flag_multi_class = True
 num_classes = 4
+batch_size = 15
 
 dp = data_preprocess(
     train_path=train_path,image_folder=image_folder,label_folder=label_folder,
@@ -31,8 +32,8 @@ dp = data_preprocess(
 )
 
 # train your own model
-train_data = dp.trainGenerator(batch_size=15)
-valid_data = dp.validLoad(batch_size=15)
+train_data = dp.trainGenerator(batch_size)
+valid_data = dp.validLoad(batch_size)
 test_data = dp.testGenerator()
 
 model = unet(num_class=4, input_size=(640, 400, 3))

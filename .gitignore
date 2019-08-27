@@ -4,3 +4,4 @@ data
 out.ft
 err.ft
 __pycache__
+.vscode

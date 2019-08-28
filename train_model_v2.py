@@ -27,7 +27,7 @@ batch_size = 15
 dp = data_preprocess(
     train_path=train_path,image_folder=image_folder,label_folder=label_folder,
     valid_path=valid_path,valid_image_folder=valid_image_folder,valid_label_folder=valid_label_folder,
-    flag_multi_class=flag_multi_class, num_classes=num_classes, 
+    flag_multi_class=flag_multi_class, num_classes=num_classes, data_gen_args=dict(),
     test_path=test_path, img_rows=640, img_cols=400, csv_name='class_dict.csv'
 )
 
@@ -47,7 +47,14 @@ model_checkpoint = keras.callbacks.ModelCheckpoint(
 history = model.fit_generator(
     train_data,
     steps_per_epoch=1000, epochs=100,
-    validation_steps=1,
+    # validation_steps=1, 
+	# """validation_steps: Only relevant if validation_data is a generator. 
+	# Total number of steps (batches of samples) to yield from validation_data generator
+	#  before stopping at the end of every epoch. 
+	# It should typically be equal to the number of samples of your 
+	# validation dataset divided by the batch size. 
+	# Optional for Sequence: if unspecified, 
+	# will use the len(validation_data) as a number of steps."""
     validation_data=valid_data,
 	shuffle=True,
     callbacks=[model_checkpoint, tb_cb]

@@ -33,7 +33,12 @@ class data_preprocess:
 		test_path=None, save_path=None, csv_name='class_dict.csv',
 		img_rows=512, img_cols=512,
 		flag_multi_class=False,
-		num_classes = 2):
+		num_classes = 2, data_gen_args = dict(
+			rotation_range=0.2, width_shift_range=0.05,
+			height_shift_range=0.05, shear_range=0.05,
+			zoom_range=0.05, vertical_flip=True,
+			horizontal_flip=True, fill_mode='nearest'
+		)):
 		
 		self.img_rows = img_rows
 		self.img_cols = img_cols
@@ -47,15 +52,9 @@ class data_preprocess:
 		self.save_path = save_path
 		self.class_names_list, self.label_values = helpers.get_label_info(os.path.join(self.train_path, csv_name))
 		self.COLOR_DICT = np.array(self.label_values)
-		self.data_gen_args = dict(
-			rotation_range=0.2, width_shift_range=0.05,
-			height_shift_range=0.05, shear_range=0.05,
-			zoom_range=0.05, vertical_flip=True,
-			horizontal_flip=True, fill_mode='nearest'
-		)
+		self.data_gen_args = data_gen_args
 		self.image_color_mode = "rgb"
 		self.label_color_mode = "rgb"
-
 		self.flag_multi_class = flag_multi_class
 		self.num_class = num_classes
 		self.target_size = (img_rows, img_cols)

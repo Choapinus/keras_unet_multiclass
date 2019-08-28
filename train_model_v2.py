@@ -47,7 +47,7 @@ model_checkpoint = keras.callbacks.ModelCheckpoint(
 history = model.fit_generator(
     train_data,
     steps_per_epoch=1000, epochs=100,
-    validation_steps=1132, # 2265 validation images / 2 = 1132
+    validation_steps=2265//batch_size, # 2265 validation images / 2 = 1132
 	# """validation_steps: Only relevant if validation_data is a generator. 
 	# Total number of steps (batches of samples) to yield from validation_data generator
 	#  before stopping at the end of every epoch. 

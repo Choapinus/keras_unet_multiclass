@@ -1,4 +1,4 @@
-from model_v2 import  *
+from model_v3 import  *
 from data import *
 import keras
 import cv2
@@ -39,15 +39,21 @@ test_data = dp.testGenerator()
 model = unet(num_class=4, input_size=(640, 400, 3))
 
 tb_cb = TensorBoard(log_dir=log_filepath)
-model_checkpoint = keras.callbacks.ModelCheckpoint(
-    './model/adadelta_categorical_crossentropy_100_epochs_1k_steps.hdf5', 
+val_loss_model_checkpoint = keras.callbacks.ModelCheckpoint(
+    './model/val_loss_adadelta_categorical_crossentropy_100_epochs_1k_steps_8_redux.hdf5',
 	monitor='val_loss', verbose=1, save_best_only=True
 )
+val_acc_model_checkpoint = keras.callbacks.ModelCheckpoint(
+    './model/val_acc_adadelta_categorical_crossentropy_100_epochs_1k_steps_8_redux.hdf5', 
+	monitor='val_acc', verbose=1, save_best_only=True
+)
+# reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
+# https://keras.io/callbacks/#reducelronplateau
 
 history = model.fit_generator(
     train_data,
     steps_per_epoch=1000, epochs=100,
-    validation_steps=2265//batch_size, # 2265 validation images / 2 = 1132
+    validation_steps=2265//batch_size, # 2265 validation images / 15 = 151
 	# """validation_steps: Only relevant if validation_data is a generator. 
 	# Total number of steps (batches of samples) to yield from validation_data generator
 	#  before stopping at the end of every epoch. 
@@ -57,5 +63,5 @@ history = model.fit_generator(
 	# will use the len(validation_data) as a number of steps."""
     validation_data=valid_data,
 	shuffle=True,
-    callbacks=[model_checkpoint, tb_cb]
+    callbacks=[val_loss_model_checkpoint, val_acc_model_checkpoint, tb_cb]
 )

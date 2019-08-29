@@ -30,7 +30,7 @@ class data_preprocess:
 	def __init__(
 		self, train_path=None, image_folder=None, label_folder=None,
 		valid_path=None,valid_image_folder =None,valid_label_folder = None,
-		test_path=None, save_path=None, csv_name='class_dict.csv',
+		test_path=None, test_label_folder=None, save_path=None, csv_name='class_dict.csv',
 		img_rows=512, img_cols=512,
 		flag_multi_class=False,
 		num_classes = 2, data_gen_args = dict(
@@ -49,6 +49,7 @@ class data_preprocess:
 		self.valid_image_folder = valid_image_folder
 		self.valid_label_folder = valid_label_folder
 		self.test_path = test_path
+		self.test_label_folder = test_label_folder
 		self.save_path = save_path
 		self.class_names_list, self.label_values = helpers.get_label_info(os.path.join(self.train_path, csv_name))
 		self.COLOR_DICT = np.array(self.label_values)
@@ -117,6 +118,16 @@ class data_preprocess:
 		filenames = os.listdir(self.test_path)
 		for filename in filenames:
 			img = io.imread(os.path.join(self.test_path, filename), as_gray=False)
+			img = img / 255.
+			img = trans.resize(img, self.target_size, mode='constant')
+			# img = np.reshape(img, img.shape + (1,)) if (not self.flag_multi_class) else img
+			img = np.reshape(img, (1,) + img.shape)
+			yield img
+	
+	def labelTestGenerator(self):
+		filenames = os.listdir(self.test_label_folder)
+		for filename in filenames:
+			img = io.imread(os.path.join(self.test_label_folder, filename), as_gray=False)
 			img = img / 255.
 			img = trans.resize(img, self.target_size, mode='constant')
 			# img = np.reshape(img, img.shape + (1,)) if (not self.flag_multi_class) else img
